@@ -7,7 +7,7 @@ Console.WriteLine("Quiz Game");
  
 var preguntas = new List<Preguntas>();
 var respuestas = new List<Respuestas>();
-
+var puntajes = new Dictionary<string, int>();
 
 PreguntasYopciones();
 StartGame();
@@ -33,6 +33,30 @@ void StartGame()
         var respuesta = Seleccion();
         AgregarRespuestaAlaLista(respuesta,item);
     }
+
+    int puntaje = GetScore();
+
+    Console.WriteLine($"Bien jugado {usuario}, tu puntaje fue  = {puntaje} respuestas correctas");
+
+    Puntajes(usuario, puntaje);
+    MostrarPuntajes();
+
+
+    preguntas = new List<Preguntas>();
+
+    Console.WriteLine("Quieres jugar de nuevo?");
+    Console.WriteLine("Escribe Si, por el contrario apreta cualquier tecla para salir");
+    string cerrar = Console.ReadLine();
+
+    if(cerrar.ToLower().Trim() == "Si")
+    {
+        StartGame();
+    }
+    
+        
+    
+   
+
 }
 
 string Seleccion()
@@ -58,8 +82,8 @@ void AgregarRespuestaAlaLista(string respuesta, Preguntas preguntas)
     {
         PreguntaId = preguntas.id,
         Seleccion = TomarSeleccion(respuesta,preguntas)
-
     });
+
 }
 
 Opciones TomarSeleccion(string respuesta, Preguntas preguntas)
@@ -76,7 +100,58 @@ Opciones TomarSeleccion(string respuesta, Preguntas preguntas)
     return Seleccion;
 }
 
+int GetScore()
+{
+    int score = 0;
+
+    foreach (var item in respuestas)
+    {
+
+        if (item.Seleccion.Correcto)
+        {
+            score++;
+        }
+        
+    }
+    return score++;
+}
+
+
+void Puntajes(string usuario, int puntaje)
+{
+    bool agregar = false;
+    foreach (var item in puntajes)
+    {
+        
+
+        if(item.Key == usuario)
+        {
+            puntajes[item.Key] = puntaje;
+            agregar = true;
+        }
+        
+    }
+    if (agregar == false)
+    {
+        puntajes.Add(usuario, puntaje);
+    }
+
+}
+
+void MostrarPuntajes()
+{
+    Console.WriteLine("Puntos: ");
+
+    foreach (var item in puntajes)
+    {
+        Console.WriteLine($"{item.Key}, puntaje : {item.Value}");
+    }
+}
+
+
+
 void PreguntasYopciones()
+
 {
     preguntas.Add(new Preguntas
     {
